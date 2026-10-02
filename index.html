@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI có làm giảm tư duy phản biện của sinh viên? | MLN111 Nhóm 2</title>
+<meta name="description" content="Blog giải thích Public/Dual Output của Nhóm 2, lớp AI1902, môn MLN111: nghiên cứu hiện có cho phép kết luận đến đâu về quan hệ nhân quả giữa dùng AI và tư duy của sinh viên.">
+<meta property="og:title" content="AI có làm giảm tư duy phản biện của sinh viên?">
+<meta property="og:description" content="Một nhận định cần được kiểm tra: phân biệt nhân quả có điều kiện và tương quan trong các nghiên cứu về AI và học tập.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#1f7a78">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f7a78'/%3E%3Cpath d='M9 22V10h6.5a4 4 0 0 1 0 8H9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#fbfaf7; --surface:#ffffff; --ink:#18232b; --muted:#56646f; --line:#e1ded6;
+  --teal:#1f7a78; --teal-ink:#0f5d5b; --teal-soft:#e0f0ee;
+  --amber-ink:#7a4e00; --amber-soft:#fbecc8;
+  --slate-ink:#3d4b57; --slate-soft:#e6eaed;
+  --good:#116b4b; --good-soft:#dff3ea; --bad:#9b2c2c; --bad-soft:#f8e1e0;
+  --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#11171b; --surface:#192127; --ink:#e7ecef; --muted:#9fb0bb; --line:#2b373f;
+    --teal:#4db3ae; --teal-ink:#86d6d1; --teal-soft:#15393a;
+    --amber-ink:#f1c36a; --amber-soft:#3b2e12;
+    --slate-ink:#b9c6cf; --slate-soft:#27333b;
+    --good:#7fdcb2; --good-soft:#143427; --bad:#f1a3a0; --bad-soft:#3a1d1d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+.skip{position:absolute;left:-999px;top:0;background:var(--teal);color:#fff;padding:8px 14px;z-index:10}
+.skip:focus{left:8px;top:8px}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+header.top{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{font:600 12px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+h1{font:700 clamp(30px,6vw,46px)/1.15 var(--serif);margin:14px 0 10px;letter-spacing:-.01em}
+.deck{font:italic 400 clamp(19px,3.4vw,24px)/1.4 var(--serif);color:var(--muted);margin:0 0 18px}
+.meta{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 16px}
+h2{font:700 clamp(22px,4vw,27px)/1.25 var(--serif);margin:46px 0 14px;letter-spacing:-.005em}
+p{margin:0 0 16px}
+a{color:var(--teal-ink);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+.tldr{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:10px;padding:18px 22px;margin:32px 0 8px}
+.tldr h2{margin:0 0 8px;font:700 13px/1.4 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--teal-ink)}
+.tldr ul{margin:0;padding-left:20px}.tldr li{margin:6px 0}
+.cite{font-size:.86em;white-space:nowrap}
+.cite a{text-decoration:none;font-weight:600;color:var(--teal-ink);border-bottom:1px dotted var(--teal)}
+.lvl{display:inline-block;font:600 12px/1 var(--sans);letter-spacing:.02em;padding:5px 9px;border-radius:99px;margin:0 6px 6px 0;vertical-align:middle}
+.lvl-causal{background:var(--teal-soft);color:var(--teal-ink)}
+.lvl-corr{background:var(--amber-soft);color:var(--amber-ink)}
+.lvl-mech{background:var(--slate-soft);color:var(--slate-ink)}
+.legend{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:15px;margin:0 0 8px}
+.legend p{margin:0}
+.note{font-size:14.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;margin:-4px 0 18px}
+.src-block{margin:0 0 6px}
+/* quiz */
+.quiz{margin-top:56px;padding:26px 22px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.quiz h2{margin-top:0}
+.q{border-top:1px solid var(--line);padding:18px 0}
+.q:first-of-type{border-top:0}
+.q .qn{font:600 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.q p.sc{margin:0 0 12px}
+.opts{display:grid;gap:8px}
+.opts button{font:500 15.5px/1.4 var(--sans);text-align:left;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--teal)}
+.opts button:disabled{cursor:default}
+.opts button.right{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.opts button.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.fb{display:none;margin-top:12px;font-size:15.5px;background:var(--bg);border-radius:10px;padding:12px 14px;border:1px solid var(--line)}
+.fb.show{display:block}
+.score{margin-top:18px;font:600 16px/1.5 var(--sans)}
+.reset{margin-top:10px;font:600 14px var(--sans);background:transparent;border:1.5px solid var(--teal);color:var(--teal-ink);border-radius:99px;padding:8px 16px;cursor:pointer}
+.reset[hidden]{display:none}
+/* sources */
+ol.refs{list-style:none;padding:0;margin:0}
+ol.refs li{padding:12px 14px;margin:0 0 8px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:15px;line-height:1.55}
+ol.refs li:target{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+ol.refs b{color:var(--teal-ink)}
+.about{margin-top:56px;padding:22px;border:1px dashed var(--line);border-radius:14px}
+.about h2{margin-top:0}
+.about h3{font:700 16px/1.4 var(--sans);margin:22px 0 8px}
+.about p{font-size:15.5px}
+footer{margin-top:64px;border-top:1px solid var(--line);padding:24px 0 48px;font-size:14px;color:var(--muted)}
+@media (max-width:520px){body{font-size:16.5px}header.top{padding-top:36px}.quiz,.about{padding:18px 16px}}
+@media print{.quiz,.skip{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Bỏ qua tới nội dung chính</a>
+
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Public / Dual Output · MLN111 · AI1902 · Nhóm 2</div>
+  <h1>AI có làm giảm tư duy phản biện của sinh viên?</h1>
+  <p class="deck">Một nhận định cần được kiểm tra</p>
+  <div class="meta"><span>Nhóm 2 · Fall 2026</span><span id="readinfo"></span></div>
+</div></header>
+
+<main id="main" class="wrap">
+
+<aside class="tldr" data-count aria-label="Tóm lược">
+  <h2>Tóm lược</h2>
+  <ul>
+    <li>Chưa thể kết luận mọi cách dùng AI đều làm giảm tư duy phản biện của sinh viên.</li>
+    <li>Khảo sát cắt ngang chỉ cho thấy tương quan; thực nghiệm ngẫu nhiên cho nhân quả trong phạm vi hẹp.</li>
+  </ul>
+</aside>
+
+<article data-count>
+
+<h2>Đi cùng nhau chưa chắc là nhân quả</h2>
+<p>Chuồn chuồn bay thấp thì mưa. Hai chuyện này hay đi cùng nhau, nhưng không ai tin chuồn chuồn làm ra mưa. Câu “AI làm giảm tư duy” cũng cần được hỏi lại như thế: nó nói về điều gì, chất lượng lập luận, điểm kiểm tra hay mức độ phụ thuộc vào công cụ?</p>
+<p>Nhóm 2, lớp AI1902 (MLN111), đọc và đối chiếu tám tài liệu để trả lời một câu hỏi hẹp hơn: nghiên cứu hiện có cho phép kết luận đến đâu về quan hệ nhân quả giữa dùng AI và tư duy của sinh viên? Câu trả lời ngắn là chưa thể nói mọi cách dùng AI đều làm giảm tư duy phản biện. Muốn kết luận, cần xét ai dùng, làm nhiệm vụ gì, AI được thiết kế hỗ trợ ra sao và người ta đo điều gì. <span class="cite">[<a href="#S01">S01</a>, <a href="#S02">S02</a>, <a href="#S04">S04</a>, <a href="#S05">S05</a>]</span></p>
+<div class="legend"><p>Nhãn cho biết thiết kế nghiên cứu cho phép suy luận đến đâu: <span class="lvl lvl-causal">nhân quả có điều kiện</span> (thực nghiệm ngẫu nhiên, phạm vi hẹp), <span class="lvl lvl-corr">tương quan</span> (khảo sát, chỉ thấy hai thứ đi cùng nhau), <span class="lvl lvl-mech">cơ chế / khung</span> (giải thích vì sao, không chứng minh).</p></div>
+
+<h2>Làm bài tốt khi có AI chưa chắc là đã học tốt</h2>
+<div class="src-block"><span class="lvl lvl-causal">S01 · nhân quả có điều kiện</span></div>
+<p>Bastani và cộng sự cho gần 1.000 học sinh lớp 9-11 ở Thổ Nhĩ Kỳ học toán, phân bổ ngẫu nhiên theo lớp vào ba nhóm: GPT Base (như chatbot thông thường), GPT Tutor (có guardrails, tức lời nhắc bảo vệ việc học) và đối chứng. Khi dùng AI, điểm luyện tập tăng 48% ở GPT Base và 127% ở GPT Tutor. Khi bỏ AI để kiểm tra, nhóm GPT Base thấp hơn đối chứng 17%, còn GPT Tutor không khác biệt có ý nghĩa thống kê (chưa chứng minh tương đương). Đây là thay đổi tương đối, chỉ ở môn toán, một trường THPT, thời gian ngắn, nên không suy ra sinh viên giảm tư duy phản biện lâu dài. <span class="cite">[<a href="#S01">S01</a>]</span></p>
+
+<div class="src-block"><span class="lvl lvl-causal">S02 · nhân quả hẹp, một nhiệm vụ</span></div>
+<p>Stadler và cộng sự cho 91 sinh viên đại học tìm hiểu hạt nano trong kem chống nắng, ngẫu nhiên dùng ChatGPT 3.5 hoặc Google. Nhóm ChatGPT báo cáo tải nhận thức thấp hơn (lượng thông tin phải xử lý cùng lúc), nhưng lập luận và biện minh kém chất lượng hơn nhóm Google. Kết quả chỉ phản ánh một nhiệm vụ, một phiên bản công cụ, ngắn hạn. <span class="cite">[<a href="#S02">S02</a>]</span></p>
+
+<h2>Bằng chứng tích cực cũng phải được giữ lại</h2>
+<div class="src-block"><span class="lvl lvl-causal">S05 · nhân quả có điều kiện</span></div>
+<p>Kestin và cộng sự theo dõi 194 sinh viên vật lý nhập môn tại Harvard theo thiết kế crossover: mỗi sinh viên học một bài với AI tutor (gia sư ảo) và một bài với học tích cực trên lớp. AI tutor thiết kế theo nguyên lý sư phạm giúp học được nhiều hơn ngay trong buổi học, dù mất ít thời gian hơn. Nhưng đây là kết quả của cả gói dạy và học: chưa tách riêng tác động của AI hay từng thành phần, và chưa đo ghi nhớ dài hạn. <span class="cite">[<a href="#S05">S05</a>]</span></p>
+<p>Kết quả này không phủ định trực tiếp S01 hay S02, vì người học, nhiệm vụ, công cụ và thước đo khác nhau. Đọc cùng nhau giúp tránh chỉ chọn bằng chứng một phía. <span class="cite">[<a href="#S01">S01</a>, <a href="#S02">S02</a>, <a href="#S05">S05</a>]</span></p>
+
+<h2>Nguyên nhân, điều kiện hay chỉ tương quan?</h2>
+<div class="src-block"><span class="lvl lvl-mech">S08 · khung lý luận</span></div>
+<p>Giáo trình Triết học Mác - Lênin (mục 2.2.2) cho rằng nguyên nhân có trước kết quả về thời gian và kết quả còn phụ thuộc điều kiện, hoàn cảnh. Nhóm vận dụng thêm một bước: tách chuyện hai hiện tượng chỉ cùng xuất hiện (tương quan) khỏi quan hệ nhân quả. Giáo trình không phải bằng chứng thực nghiệm về AI. <span class="cite">[<a href="#S08">S08</a>]</span></p>
+
+<div class="src-block"><span class="lvl lvl-corr">S04 · tương quan</span></div>
+<p>Zhang và cộng sự khảo sát trực tuyến 300 sinh viên ở Seoul: ai căng thẳng học tập và kỳ vọng thành tích cao hơn thì phụ thuộc AI nhiều hơn. Abstract dùng cụm “causes and consequences”, nhưng chính bài thừa nhận dữ liệu cắt ngang không xác nhận được nhân quả: dữ liệu thu một lần, tự báo cáo, nên không biết yếu tố nào đến trước, có thể chiều ngược lại hoặc có yếu tố thứ ba. Vì vậy không thể viết chuỗi “áp lực gây phụ thuộc AI, rồi AI làm giảm tư duy” như điều đã chứng minh. <span class="cite">[<a href="#S04">S04</a>]</span></p>
+
+<div class="src-block"><span class="lvl lvl-corr">S07 · tương quan</span></div>
+<p>Lee và cộng sự khảo sát 319 người lao động tri thức cũng chỉ thấy tương quan: tin vào GenAI nhiều hơn đi cùng tự báo cáo ít tư duy phản biện hơn. <span class="cite">[<a href="#S07">S07</a>]</span></p>
+
+<h2>Giao bớt việc suy nghĩ cho công cụ nghĩa là gì?</h2>
+<div class="src-block"><span class="lvl lvl-mech">S06 · khung</span><span class="lvl lvl-mech">S03 · cơ chế</span></div>
+<p>Risko và Gilbert dùng khái niệm <em>cognitive offloading</em> (giảm tải nhận thức) để chỉ việc chuyển bớt xử lý nhận thức sang công cụ bên ngoài. Đây là khung giải thích từ trước thời GenAI, không chứng minh ChatGPT làm sinh viên mất khả năng tư duy. <span class="cite">[<a href="#S06">S06</a>]</span> Buçinca và cộng sự cho thấy thiết kế buộc người dùng cân nhắc trước khi tin AI giúp họ bớt làm theo khuyến nghị sai, nhưng không trong bối cảnh học tập nên chỉ là bằng chứng về cơ chế. <span class="cite">[<a href="#S03">S03</a>]</span></p>
+
+<h2>Người học có thể tự kiểm tra điều gì?</h2>
+<p>Nhóm gợi ý ba việc thử: tự lập luận trước khi xem câu trả lời của AI, kiểm tra căn cứ của nó, rồi tự làm lại khi không còn AI. Đây chỉ là gợi ý cần đánh giá thêm, chưa phải quy trình đã chứng minh. <span class="cite">[<a href="#S01">S01</a>, <a href="#S03">S03</a>, <a href="#S05">S05</a>]</span> Khi đọc bất kỳ kết luận nào về AI, hãy hỏi: “Đã đo điều gì, ở ai, trong điều kiện nào?”</p>
+
+<h2>Giới hạn của bài tổng hợp</h2>
+<p>Chỉ ba trong tám tài liệu nghiên cứu trên sinh viên (S02, S04, S05), phần lớn chỉ một nhiệm vụ, một trường, thời gian ngắn. Chưa nguồn nào đo tư duy phản biện của sinh viên bằng công cụ chuẩn hóa và theo dõi dài hạn, cũng chưa có dữ liệu sinh viên Việt Nam. Nhóm chưa làm khảo sát riêng, nên bài này là tổng hợp tài liệu, không phải kết quả điều tra. Vì vậy chưa đủ cơ sở khẳng định GenAI chắc chắn làm giảm tư duy phản biện của sinh viên, cũng chưa đủ cơ sở bảo đảm mọi cách dùng AI đều có lợi. <span class="cite">[<a href="#S01">S01</a>-<a href="#S07">S07</a>]</span></p>
+
+</article>
+
+<section class="quiz" id="quiz" aria-labelledby="quiz-h">
+  <h2 id="quiz-h">Thử tay: nhân quả hay chỉ tương quan?</h2>
+  <p>Bốn tình huống lấy từ chính các nghiên cứu ở trên. Chọn một đáp án để xem giải thích.</p>
+
+  <div class="q" data-answer="b">
+    <div class="qn">Tình huống 1</div>
+    <p class="sc">Khảo sát trực tuyến 300 sinh viên ở Seoul tại một thời điểm: ai căng thẳng học tập hơn thì phụ thuộc AI nhiều hơn. Có thể kết luận “căng thẳng gây ra phụ thuộc AI” không?</p>
+    <div class="opts">
+      <button type="button" data-c="a">Có, nhân quả trong phạm vi nghiên cứu</button>
+      <button type="button" data-c="b">Không, mới chỉ là tương quan</button>
+      <button type="button" data-c="c">Không đủ thông tin để nói gì</button>
+    </div>
+    <div class="fb" role="status" aria-live="polite">Đáp án đúng: tương quan. Dữ liệu thu một lần và do sinh viên tự báo cáo, nên không biết yếu tố nào đến trước, cũng không loại được chiều ngược lại hoặc yếu tố thứ ba. <span class="cite">[<a href="#S04">S04</a>]</span></div>
+  </div>
+
+  <div class="q" data-answer="a">
+    <div class="qn">Tình huống 2</div>
+    <p class="sc">Học sinh được phân bổ ngẫu nhiên theo lớp. Khi làm bài kiểm tra không có AI, nhóm từng dùng GPT Base thấp hơn nhóm đối chứng 17%. Có thể nói gì?</p>
+    <div class="opts">
+      <button type="button" data-c="a">Có căn cứ nhân quả, nhưng chỉ trong phạm vi nghiên cứu</button>
+      <button type="button" data-c="b">Chỉ là tương quan</button>
+      <button type="button" data-c="c">Không đủ thông tin để nói gì</button>
+    </div>
+    <div class="fb" role="status" aria-live="polite">Đáp án đúng: nhân quả có điều kiện. Phân bổ ngẫu nhiên có đối chứng hỗ trợ kết luận về tác động của gói GPT Base, nhưng chỉ với toán THPT, thời gian ngắn, và không đo trực tiếp tư duy phản biện. <span class="cite">[<a href="#S01">S01</a>]</span></div>
+  </div>
+
+  <div class="q" data-answer="b">
+    <div class="qn">Tình huống 3</div>
+    <p class="sc">Khảo sát 319 người lao động tri thức: ai tin vào GenAI nhiều hơn thì tự báo cáo ít tư duy phản biện hơn. “Tin AI làm giảm tư duy phản biện” có được chứng minh không?</p>
+    <div class="opts">
+      <button type="button" data-c="a">Có, nhân quả trong phạm vi nghiên cứu</button>
+      <button type="button" data-c="b">Không, mới chỉ là tương quan</button>
+      <button type="button" data-c="c">Không đủ thông tin để nói gì</button>
+    </div>
+    <div class="fb" role="status" aria-live="polite">Đáp án đúng: tương quan. Đây là khảo sát cắt ngang với dữ liệu tự báo cáo và không có can thiệp, nên chiều tác động chưa được xác định. <span class="cite">[<a href="#S07">S07</a>]</span></div>
+  </div>
+
+  <div class="q" data-answer="a">
+    <div class="qn">Tình huống 4</div>
+    <p class="sc">194 sinh viên vật lý học một bài với AI tutor có thiết kế sư phạm và một bài với học tích cực trên lớp; học tức thời cao hơn khi dùng AI tutor. Kết luận nào phù hợp?</p>
+    <div class="opts">
+      <button type="button" data-c="a">Có căn cứ nhân quả, nhưng chỉ cho gói AI tutor đó, trong phạm vi nghiên cứu</button>
+      <button type="button" data-c="b">Mọi AI đều giúp học tốt hơn</button>
+      <button type="button" data-c="c">Chỉ là tương quan</button>
+    </div>
+    <div class="fb" role="status" aria-live="polite">Đáp án đúng: nhân quả có điều kiện. Thiết kế crossover cho phép so sánh hai hình thức học trong cùng người học, nhưng chỉ với gói AI tutor này, môn vật lý, kết quả tức thời; không nói gì về AI thiếu thiết kế sư phạm hay ghi nhớ dài hạn. <span class="cite">[<a href="#S05">S05</a>]</span></div>
+  </div>
+
+  <div class="score" id="score" role="status" aria-live="polite"></div>
+  <button type="button" class="reset" id="reset" hidden>Làm lại</button>
+</section>
+
+<section id="nguon" aria-labelledby="nguon-h">
+  <h2 id="nguon-h">Nguồn</h2>
+  <ol class="refs">
+    <li id="S01"><b>[S01]</b> H. Bastani, O. Bastani, A. Sungu, H. Ge, Ö. Kabakcı, R. Mariman (2025). Generative AI without guardrails can harm learning: Evidence from high school mathematics. <i>Proceedings of the National Academy of Sciences</i>. <a href="https://doi.org/10.1073/pnas.2422633122">doi.org/10.1073/pnas.2422633122</a></li>
+    <li id="S02"><b>[S02]</b> M. Stadler, M. Bannert, M. Sailer (2024). Cognitive ease at a cost: LLMs reduce mental effort but compromise depth in student scientific inquiry. <i>Computers in Human Behavior</i>. <a href="https://doi.org/10.1016/j.chb.2024.108386">doi.org/10.1016/j.chb.2024.108386</a></li>
+    <li id="S03"><b>[S03]</b> Z. Buçinca, M. B. Malaya, K. Z. Gajos (2021). To Trust or to Think: Cognitive Forcing Functions Can Reduce Overreliance on AI in AI-assisted Decision-making. <i>Proc. ACM Hum.-Comput. Interact.</i> <a href="https://doi.org/10.1145/3449287">doi.org/10.1145/3449287</a></li>
+    <li id="S04"><b>[S04]</b> S. Zhang, X. Zhao, T. Zhou, J. H. Kim (2024). Do you have AI dependency? The roles of academic self-efficacy, academic stress, and performance expectations on problematic AI usage behavior. <i>International Journal of Educational Technology in Higher Education</i>. <a href="https://doi.org/10.1186/s41239-024-00467-0">doi.org/10.1186/s41239-024-00467-0</a></li>
+    <li id="S05"><b>[S05]</b> G. Kestin, K. Miller, A. Klales, T. Milbourne, G. Ponti (2025). AI tutoring outperforms in-class active learning: an RCT introducing a novel research-based design in an authentic educational setting. <i>Scientific Reports</i>. <a href="https://doi.org/10.1038/s41598-025-97652-6">doi.org/10.1038/s41598-025-97652-6</a></li>
+    <li id="S06"><b>[S06]</b> E. F. Risko, S. J. Gilbert (2016). Cognitive Offloading. <i>Trends in Cognitive Sciences</i>. <a href="https://doi.org/10.1016/j.tics.2016.07.002">doi.org/10.1016/j.tics.2016.07.002</a></li>
+    <li id="S07"><b>[S07]</b> H.-P. Lee et al. (2025). The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers. <i>Proc. CHI 2025</i>. <a href="https://doi.org/10.1145/3706598.3713778">doi.org/10.1145/3706598.3713778</a></li>
+    <li id="S08"><b>[S08]</b> Hội đồng biên soạn giáo trình Triết học Mác - Lênin; Phạm Văn Đức (chủ biên) (2019). <i>Giáo trình Triết học Mác - Lênin</i>, trình độ đại học, khối các ngành ngoài lý luận chính trị, mục 2.2.2, tr. 115-117. Sách giáo trình, không có DOI.</li>
+  </ol>
+</section>
+
+<section class="about" id="ve-bai-nay" aria-labelledby="about-h">
+  <h2 id="about-h">Về bài này</h2>
+  <p>Phần này đi kèm sản phẩm Public/Dual Output theo yêu cầu của môn học, không tính vào dung lượng bài viết.</p>
+
+  <h3>Từ findings học thuật sang bài viết công khai</h3>
+  <p data-words="150-250" id="transfer">Bài này chuyển hồ sơ học thuật của nhóm (Source Log, Synthesis Matrix, Evidence Log) thành một bài giải thích cho sinh viên. Thay vì liệt kê từng nghiên cứu, bài đi theo các câu hỏi gần gũi với người đọc: làm bài tốt khi có AI có nghĩa là đã học tốt không, và kết quả nào cho phép suy luận nhân quả, kết quả nào chỉ cho thấy tương quan. Ví dụ chuồn chuồn và cơn mưa mở bài để người đọc thấy ngay khác biệt giữa “đi cùng nhau” và “làm ra nhau”. Thuật ngữ như tải nhận thức hay cognitive offloading được giải thích bằng ngôn ngữ đời thường nhưng vẫn giữ nguyên giới hạn của nguồn. Kết quả bất lợi từ S01 và S02 được đặt cạnh kết quả tích cực từ S05 để tránh truyền thông một chiều. Nhãn mức suy luận giúp người đọc biết mỗi nguồn cho phép kết luận đến đâu, còn mini-quiz cho họ tự phân loại bằng các tình huống lấy từ chính các nghiên cứu. Mỗi nhận định chính đều có mã nguồn để truy lại, và phần giới hạn được giữ nguyên thay vì lược bỏ cho dễ đọc.</p>
+
+  <h3>Khai báo sử dụng AI</h3>
+  <p>Nhóm dùng AI ở mức hỗ trợ (vùng Amber theo quy định của môn học). Bản nháp đầu tiên của bài được soạn với hỗ trợ của ChatGPT/Codex; Claude (Anthropic) hỗ trợ dựng trang web, biên tập diễn đạt, bố cục và các tình huống mini-quiz từ hồ sơ do nhóm cung cấp. Nhóm không dùng đầu ra của AI làm nguồn học thuật: mọi nhận định dựa trên tài liệu S01-S08. Số liệu được đối chiếu lại với bài gốc và Crossref ngày 01/10/2026 (AI hỗ trợ truy xuất, thành viên nhóm xác nhận). Diễn giải lý luận và kết luận cuối cùng do nhóm chịu trách nhiệm, và việc dùng AI được ghi trong PAAL Log của nhóm.</p>
+
+  <h3>Phạm vi và quyền riêng tư</h3>
+  <p>Trang không thu thập hay công bố dữ liệu cá nhân. Mini-quiz chạy hoàn toàn trên trình duyệt của bạn và không lưu kết quả.</p>
+</section>
+
+</main>
+
+<footer><div class="wrap">Public / Dual Output · MLN111 · AI1902 · Nhóm 2 · Fall 2026 · Đây là sản phẩm học tập, không phải tư vấn chuyên môn.</div></footer>
+
+<script>
+(function(){
+  // Reading info: counts words only inside [data-count] blocks (summary + article).
+  try{
+    var n=0;
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      var t=(el.innerText||el.textContent||'').trim();
+      if(t) n+=t.split(/\s+/).length;
+    });
+    var m=Math.max(1,Math.round(n/180));
+    var r=document.getElementById('readinfo');
+    if(r&&n) r.textContent='Bài đọc khoảng '+n.toLocaleString('vi-VN')+' chữ · '+m+' phút';
+  }catch(e){}
+
+  // Mini-quiz
+  var qs=[].slice.call(document.querySelectorAll('.q'));
+  var scoreEl=document.getElementById('score'), resetBtn=document.getElementById('reset');
+  var done=0, ok=0;
+  function summary(){
+    if(done<qs.length) return;
+    var msg=ok===qs.length?'Đúng cả '+qs.length+' tình huống.':'Bạn đúng '+ok+'/'+qs.length+' tình huống.';
+    scoreEl.textContent=msg+' Câu hỏi nên mang theo: đã đo điều gì, ở ai, trong điều kiện nào?';
+    resetBtn.hidden=false;
+  }
+  qs.forEach(function(q){
+    var ans=q.getAttribute('data-answer');
+    var btns=[].slice.call(q.querySelectorAll('button'));
+    var fb=q.querySelector('.fb');
+    btns.forEach(function(b){
+      b.addEventListener('click',function(){
+        if(q.getAttribute('data-done')) return;
+        q.setAttribute('data-done','1'); done++;
+        var pick=b.getAttribute('data-c');
+        if(pick===ans) ok++;
+        btns.forEach(function(x){
+          x.disabled=true;
+          if(x.getAttribute('data-c')===ans) x.classList.add('right');
+        });
+        if(pick!==ans) b.classList.add('wrong');
+        fb.classList.add('show');
+        summary();
+      });
+    });
+  });
+  resetBtn.addEventListener('click',function(){
+    done=0; ok=0; scoreEl.textContent=''; resetBtn.hidden=true;
+    qs.forEach(function(q){
+      q.removeAttribute('data-done');
+      q.querySelectorAll('button').forEach(function(x){x.disabled=false;x.classList.remove('right','wrong');});
+      q.querySelector('.fb').classList.remove('show');
+    });
+    document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>
